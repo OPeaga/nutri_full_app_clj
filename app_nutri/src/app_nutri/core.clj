@@ -1,4 +1,4 @@
-(ns nutri-app.core
+(ns app-nutri.core
   (:gen-class))
 
 (defn -main

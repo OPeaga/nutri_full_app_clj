@@ -1,4 +1,4 @@
-# nutri_app
+# app_nutri
 
 FIXME: description
 
@@ -10,7 +10,7 @@ Download from http://example.com/FIXME.
 
 FIXME: explanation
 
-    $ java -jar nutri_app-0.1.0-standalone.jar [args]
+    $ java -jar app_nutri-0.1.0-standalone.jar [args]
 
 ## Options
 

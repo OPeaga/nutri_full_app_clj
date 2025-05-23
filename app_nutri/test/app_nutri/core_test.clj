@@ -1,6 +1,6 @@
-(ns nutri-app.core-test
+(ns app-nutri.core-test
   (:require [clojure.test :refer :all]
-            [nutri-app.core :refer :all]))
+            [app-nutri.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
