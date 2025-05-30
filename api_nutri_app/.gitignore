@@ -8,6 +8,3 @@ pom.xml.asc
 *.class
 /.lein-*
 /.nrepl-port
- .idea/
-api_nutri_app.iml
-../app_nutri/.idea/
