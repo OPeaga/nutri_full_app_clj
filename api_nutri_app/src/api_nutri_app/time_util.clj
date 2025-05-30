@@ -1,12 +1,19 @@
-(ns api-nutri-app.time-util)                              ;; Arquivo para manusear datas
-(:import [java.time LocalDateTime LocalDate LocalTime]
-         [java.time.format DateTimeFormatter])
+(ns api-nutri-app.time-util
+  (:import [java.time LocalDateTime]
+           [java.time.format DateTimeFormatter])
+  )
 
 
-(defn now []
+(defn agora []
   (LocalDateTime/now))
 
-(defn format-date [data]
-  (let [fmt (DateTimeFormatter/ofPattern "dd-mm-yyyy hh:mm:ss")]
-    (.format (data) fmt))
-  )
+(defn formata-data-string [data]
+  (let [fmt (DateTimeFormatter/ofPattern "dd/MM/yyyy HH:mm")]
+    (.format data fmt)))
+
+   ;; Remove the parentheses around data
+
+(defn formata-data-objto [data-str]
+  (let [fmt (DateTimeFormatter/ofPattern "dd/MM/yyyy HH:mm")]
+    (LocalDateTime/parse data-str fmt)))
+
