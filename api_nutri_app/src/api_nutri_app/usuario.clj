@@ -11,3 +11,6 @@
 
 (defn consultar_usuarios []
   @lista_usuarios)
+
+
+;;(println (consultar_usuarios))
