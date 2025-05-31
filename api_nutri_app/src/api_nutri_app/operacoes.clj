@@ -1,6 +1,7 @@
 (ns api-nutri-app.operacoes
   (:require [clj-http.client :as http-client]
-            [api-nutri-app.usuario :as usuario])
+            [api-nutri-app.usuario :as usuario]
+            [api-nutri-app.alimento :as alimento])
   (:import [java.time LocalDateTime]
            [java.time.format DateTimeFormatter])
   )
@@ -62,4 +63,10 @@
                                 :sexo sexo
                                 :data_registro data_atual_formatada})))
 
+(defn operacao_registra_alimento [alimento porcao]
+  (let [calorias_consumidas (calcular_calorias_por_porcao alimento porcao)
+        data_atual_formatada (.format (LocalDateTime/now) (DateTimeFormatter/ofPattern "dd/MM/yyyy"))]
+    (alimento/regi)
+    )
+  )
 
