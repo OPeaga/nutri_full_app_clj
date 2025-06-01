@@ -5,7 +5,7 @@
 (defn registrar_alimento [alimento]
   (swap! lista_alimento conj alimento))
 
-(defn consultar_lista []
+(defn consultar_alimentos []
   @lista_alimento)
 
 (defn limpar_lista_alimentos []

@@ -1,7 +1,8 @@
 (ns api-nutri-app.operacoes
   (:require [clj-http.client :as http-client]
             [api-nutri-app.usuario :as usuario]
-            [api-nutri-app.alimento :as alimento])
+            [api-nutri-app.alimento :as alimento]
+            [api-nutri-app.exercicio :as exercicio])
   (:import [java.time LocalDateTime]
            [java.time.format DateTimeFormatter])
   )
@@ -94,47 +95,74 @@
                                 :sexo sexo
                                 :data_registro data_atual_formatada})))
 
-(defn registrar_alimento [alimento porcao data]
-  (let [alimento_em_ingles (:data (traducao_direta_pt_en alimento))
-        calorias_consumidas (calcular_calorias_por_porcao porcao alimento_em_ingles)]
-    (alimento/registrar_alimento {:alimento (str porcao "g de " alimento) :calorias calorias_consumidas :data data})
-    )
-  )
 
 (defn converte_kg_pounds [peso_kg]
   (* (double peso_kg) 2.20462)
   )
 
 (defn calcular_gasto_calorico [atividade duracao]
-  (let [usuario (usuario/getUsuario_por_id 1)]              ;; Vamos trabalhar somente com 1 usuario
+  (let [usuario (usuario/getUsuario_por_id 1)] ;; Trabalhamos com o usuário 1
     (if (not (nil? usuario))
-      (let [peso_pounds (converte_kg_pounds (:peso usuario))
-            atividade_en (traducao_direta_pt_en atividade)]
+      (let [peso_pounds (converte_kg_pounds (:peso usuario))]
         (try
-          (let [response
-                (http-client/get api-url-exercicio
-                                 {:headers
-                                  {:x-rapidapi-key traducao-api-key ;; Por algum motivo e a mesma api key de traducao
-                                   :x-rapidapi-host "calories-burned-by-api-ninjas.p.rapidapi.com"}
-                                  :query-params {:activity atividade_en :duration duracao :weight peso_pounds}
-                                  :as :json })]
-            (println response)
-            ;{:success true
-            ; :data    (:body response)
-            ; :status  (:status response)}
+          (let [response (http-client/get api-url-exercicio
+                                          {:headers
+                                           {:x-rapidapi-key traducao-api-key
+                                            :x-rapidapi-host "calories-burned-by-api-ninjas.p.rapidapi.com"}
+                                           :query-params {:activity atividade
+                                                          :duration duracao
+                                                          :weight peso_pounds}
+                                           :as :json})
+                atividades (:body response)]
 
+            (if (or (nil? atividades) (empty? atividades))
+              (throw (Exception. (str "Nenhuma atividade correspondente a '" atividade "' encontrada na API")))
+
+              (let [primeira-atividade (first atividades)
+                    calorias (:total_calories primeira-atividade)]
+                {:success true
+                 :data calorias
+                 :status (:status response)})
+              )
             )
 
           (catch Exception e
             {:success false
-             :error   (.getMessage e)
-             :data    nil})
-          )
-        )
-      "Usuario ainda não cadastrado"
-      )
+             :error (.getMessage e)
+             :data nil})))
+      "Usuário ainda não cadastrado")))
+
+
+(defn registrar_alimento [alimento porcao data]
+  (try
+    (let [alimento_em_ingles (:data (traducao_direta_pt_en alimento))
+          calorias_consumidas (calcular_calorias_por_porcao porcao alimento_em_ingles)]
+      (alimento/registrar_alimento {:alimento (str porcao "g de " alimento)
+                                    :calorias calorias_consumidas
+                                    :data     data})
+      "Alimento Registrado com sucesso")
+    (catch Exception e
+      "Erro ao registrar alimento")
     )
   )
 
-(registrar_usuario 180 80 24 "M")
-(println (calcular_gasto_calorico "surfar" 180))
+(defn registrar_exercicio [atividade duracao data]
+  (try
+    (let [atividade_em_ingles (:data (traducao_direta_pt_en atividade))
+          calorias_perdidas (:data (calcular_gasto_calorico atividade_em_ingles duracao))]
+      (exercicio/registrar_exercicio {:exercicio (str atividade " por " duracao " minutos") :calorias (* -1.00 calorias_perdidas) :data data})
+      "Exercício Registrado com Sucesso"
+      )
+    (catch Exception e
+     (.getMessage e)
+    )
+  )
+  )
+
+;(registrar_usuario 180 80 24 "M")
+;(println (registrar_exercicio "natacao" 70 "26/05/2025"))
+;(println (registrar_alimento "feijao" 100 "27/05/2025"))
+;
+;(println (alimento/consultar_alimentos))
+;(println (exercicio/consultar_exercicios))
+
