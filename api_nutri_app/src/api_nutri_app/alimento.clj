@@ -8,5 +8,5 @@
 (defn consultar_lista []
   @lista_alimento)
 
-(defn limpar_lista []
+(defn limpar_lista_alimentos []
   (reset! lista_alimento []))

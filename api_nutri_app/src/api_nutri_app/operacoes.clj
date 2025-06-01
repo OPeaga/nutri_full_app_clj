@@ -15,21 +15,22 @@
 (when (nil? traducao-api-key)
   (throw (Exception. "TRANSLATE_API_KEY variavel de ambiente não definida!")))
 
+
 (def api-url-alimento "https://api.calorieninjas.com/v1/nutrition?query=")
 (def api-url-traducao "https://google-translate113.p.rapidapi.com/api/v1/translator/text")
+(def api-url-exercicio "https://calories-burned-by-api-ninjas.p.rapidapi.com/v1/caloriesburned")
+
 
 (defn traducao_direta_pt_en [palavra_em_pt]
   (try
     (let [response (http-client/post
                      api-url-traducao
-                     {:headers      {:x-rapidapi-key  "babe4338b3msh09ac1243ab63506p1c7aa3jsn4d927b873ca0"
+                     {:headers      {:x-rapidapi-key  traducao-api-key
                                      :x-rapidapi-host "google-translate113.p.rapidapi.com"}
                       :form-params  {:text palavra_em_pt
                                      :from "pt"
                                      :to   "en"}
-                      :as           :json
-                      }
-                     )]
+                      :as           :json})]
       {:success true
        :data (get-in response [:body :trans])
        :status (:status response)}
@@ -40,7 +41,6 @@
        :error   (.getMessage e)
        :data    nil}))
   )
-
 
 (defn consultar_nutricao [query]
   (try
@@ -57,7 +57,8 @@
     (catch Exception e
       {:success false
        :error   (.getMessage e)
-       :data    nil}))
+       :data    nil})
+    )
   )
 
 (defn calcular_calorias_por_porcao [porcao alimento]
@@ -93,15 +94,47 @@
                                 :sexo sexo
                                 :data_registro data_atual_formatada})))
 
-
-(defn registrar_alimento [alimento porcao]
+(defn registrar_alimento [alimento porcao data]
   (let [alimento_em_ingles (:data (traducao_direta_pt_en alimento))
-        calorias_consumidas (calcular_calorias_por_porcao porcao alimento_em_ingles)
-        data_atual_formatada (.format (LocalDateTime/now) (DateTimeFormatter/ofPattern "dd/MM/yyyy"))]
-    (alimento/registrar_alimento {:alimento (str porcao "g de " alimento) :calorias calorias_consumidas :data data_atual_formatada})
+        calorias_consumidas (calcular_calorias_por_porcao porcao alimento_em_ingles)]
+    (alimento/registrar_alimento {:alimento (str porcao "g de " alimento) :calorias calorias_consumidas :data data})
     )
   )
 
-;;(def pt "arroz")
-;;(registrar_alimento pt 150 )
-;;(println (alimento/consultar_lista))
+(defn converte_kg_pounds [peso_kg]
+  (* (double peso_kg) 2.20462)
+  )
+
+(defn calcular_gasto_calorico [atividade duracao]
+  (let [usuario (usuario/getUsuario_por_id 1)]              ;; Vamos trabalhar somente com 1 usuario
+    (if (not (nil? usuario))
+      (let [peso_pounds (converte_kg_pounds (:peso usuario))
+            atividade_en (traducao_direta_pt_en atividade)]
+        (try
+          (let [response
+                (http-client/get api-url-exercicio
+                                 {:headers
+                                  {:x-rapidapi-key traducao-api-key ;; Por algum motivo e a mesma api key de traducao
+                                   :x-rapidapi-host "calories-burned-by-api-ninjas.p.rapidapi.com"}
+                                  :query-params {:activity atividade_en :duration duracao :weight peso_pounds}
+                                  :as :json })]
+            (println response)
+            ;{:success true
+            ; :data    (:body response)
+            ; :status  (:status response)}
+
+            )
+
+          (catch Exception e
+            {:success false
+             :error   (.getMessage e)
+             :data    nil})
+          )
+        )
+      "Usuario ainda não cadastrado"
+      )
+    )
+  )
+
+(registrar_usuario 180 80 24 "M")
+(println (calcular_gasto_calorico "surfar" 180))

@@ -2,7 +2,7 @@
 
 (def lista_usuarios (atom []))
 
-(defn limpar_lista []
+(defn limpar_lista_usuarios []
   (reset! lista_usuarios [])
   )
 
@@ -12,5 +12,6 @@
 (defn consultar_usuarios []
   @lista_usuarios)
 
-
-;;(println (consultar_usuarios))
+(defn getUsuario_por_id [id]
+ (first (filter  #(= (:id %) id)  (consultar_usuarios)))
+  )
