@@ -262,4 +262,4 @@
     )
   )
 
-(println (calcular_balanco_calorico "25/05/2025" "01/06/2025"))
+(calcular_balanco_calorico "25/05/2025" "01/06/2025")
