@@ -180,7 +180,6 @@
     )
   )
 
-
 (defn inInterval? [data_ref data_ini data_fim]
   (let [formatter_data (DateTimeFormatter/ofPattern "dd/MM/yyyy")]
     (and
@@ -213,6 +212,7 @@
 (def consultar_extrato_alimentos  (partial consultar_extrato 1))
 
 (registrar_usuario 176 82 23 "M")
+
 (def alimentos
   [{:alimento "150g de arroz", :calorias 191.10000000000002, :data "25/05/2025"}
    {:alimento "80g de banana", :calorias 71.52000000000001, :data "26/05/2025"}
@@ -254,12 +254,14 @@
      {:exercicio "skate por 40 minutos", :calorias -200.0, :data "05/06/2025"}])
 
 (defn calcular_balanco_calorico [data_ini data_fim]
-  (let [transacoes (concat (alimento/consultar_alimentos) (exercicio/consultar_exercicios))
+  (let [transacoes (concat alimentos exercicios )                                 ;; (alimento/consultar_alimentos) (exercicio/consultar_exercicios))
         transacaoes_periodo (filter #(inInterval? (:data %) data_ini data_fim) transacoes)]
-    (println transacoes)
-    (println transacaoes_periodo)
     (format "%.2f cal" (reduce + (map #(:calorias %) transacaoes_periodo)))
     )
   )
 
-(calcular_balanco_calorico "25/05/2025" "01/06/2025")
+(defn consultar_usuario []
+  (str (usuario/getUsuario_por_id 1))
+  )
+
+;(println (calcular_balanco_calorico "25/05/2025" "01/06/2025"))

@@ -9,7 +9,9 @@
 (defroutes app-routes
            (GET "/" [] (response {:mensagem "Bem-vindo à API Nutri App"}))
 
-           (POST "/usuario" req
+           (GET "/usuario/consulta" [] (ops/consultar_usuario))
+
+           (POST "/usuario/cadastra" req
              (let [{:keys [altura peso idade sexo]} (:body req)]
                (response (ops/registrar_usuario altura peso idade sexo))))
 
@@ -35,8 +37,7 @@
 
            (POST "/saldo" req
              (let [{:keys [data-inicio data-fim]} (:body req)
-                   transacoes (ops/consultar_extrato data-inicio data-fim)
-                   saldo (reduce + (map :calorias transacoes))]
+                   saldo (ops/calcular_balanco_calorico data-inicio data-fim) ]
                (response {:saldo-calorico saldo})))
 
            (route/not-found (response {:erro "Rota não encontrada"})))
