@@ -209,58 +209,57 @@
    )
   )
 
-;(defn calcular_balanco_calorico [data_ini data_fim])
-
 (def consultar_extrato_exercicios (partial consultar_extrato 2))
 (def consultar_extrato_alimentos  (partial consultar_extrato 1))
 
-(println (registrar_usuario 176 82 23 "M") )
-(println (registrar_alimento "arroz" 150 "25/05/2025"))
-(println (registrar_alimento "frango_grelhado" 200 "25/05/2025"))
-(println (registrar_alimento "banana" 80 "26/05/2025"))
-(println (registrar_alimento "aveia" 50 "26/05/2025"))
-(println (registrar_alimento "salmao" 180 "27/05/2025"))
-(println (registrar_alimento "brocolis" 100 "27/05/2025"))
-(println (registrar_alimento "batata_doce" 120 "28/05/2025"))
-(println (registrar_alimento "ovos" 140 "28/05/2025"))
-(println (registrar_alimento "iogurte_grego" 170 "29/05/2025"))
-(println (registrar_alimento "quinoa" 90 "29/05/2025"))
-(println (registrar_alimento "espinafre" 60 "30/05/2025"))
-(println (registrar_alimento "peito_peru" 160 "30/05/2025"))
-(println (registrar_alimento "abacate" 200 "31/05/2025"))
-(println (registrar_alimento "castanha_para" 40 "31/05/2025"))
-(println (registrar_alimento "cenoura" 70 "01/06/2025"))
-(println (registrar_alimento "atum" 150 "01/06/2025"))
-(println (registrar_alimento "manga" 110 "02/06/2025"))
-(println (registrar_alimento "lentilha" 130 "02/06/2025"))
-(println (registrar_alimento "tomate" 85 "03/06/2025"))
-(println (registrar_alimento "amendoim" 50 "05/06/2025"))
-(println (registrar_exercicio "corrida" 30 "25/05/2025"))
-(println (registrar_exercicio "musculacao" 45 "25/05/2025"))
-(println (registrar_exercicio "natacao" 60 "26/05/2025"))
-(println (registrar_exercicio "yoga" 40 "26/05/2025"))
-(println (registrar_exercicio "ciclismo" 90 "27/05/2025"))
-(println (registrar_exercicio "pilates" 50 "27/05/2025"))
-(println (registrar_exercicio "caminhada" 25 "28/05/2025"))
-(println (registrar_exercicio "crossfit" 35 "28/05/2025"))
-(println (registrar_exercicio "alongamento" 15 "29/05/2025"))
-(println (registrar_exercicio "boxe" 45 "29/05/2025"))
-(println (registrar_exercicio "futebol" 75 "30/05/2025"))
-(println (registrar_exercicio "tenis" 60 "30/05/2025"))
-(println (registrar_exercicio "danca" 40 "31/05/2025"))
-(println (registrar_exercicio "escalada" 80 "31/05/2025"))
-(println (registrar_exercicio "basquete" 55 "01/06/2025"))
-(println (registrar_exercicio "volei" 50 "01/06/2025"))
-(println (registrar_exercicio "spinning" 45 "02/06/2025"))
-(println (registrar_exercicio "jiu_jitsu" 70 "02/06/2025"))
-(println (registrar_exercicio "hidroginastica" 35 "03/06/2025"))
-(println (registrar_exercicio "skate" 40 "05/06/2025"))
+(registrar_usuario 176 82 23 "M")
+(def alimentos
+  [{:alimento "150g de arroz", :calorias 191.10000000000002, :data "25/05/2025"}
+   {:alimento "80g de banana", :calorias 71.52000000000001, :data "26/05/2025"}
+   {:alimento "50g de aveia", :calorias 184.15, :data "26/05/2025"}
+   {:alimento "180g de salmao", :calorias 375.65999999999997, :data "27/05/2025"}
+   {:alimento "100g de brocolis", :calorias 35.0, :data "27/05/2025"}
+   {:alimento "120g de batata_doce", :calorias 93.0, :data "28/05/2025"}
+   {:alimento "140g de ovos", :calorias 202.02, :data "28/05/2025"}
+   {:alimento "90g de quinoa", :calorias 109.62, :data "29/05/2025"}
+   {:alimento "60g de espinafre", :calorias 13.98, :data "30/05/2025"}
+   {:alimento "200g de abacate", :calorias 334.4, :data "31/05/2025"}
+   {:alimento "70g de cenoura", :calorias 23.799999999999997, :data "01/06/2025"}
+   {:alimento "150g de atum", :calorias 199.95000000000002, :data "01/06/2025"}
+   {:alimento "130g de lentilha", :calorias 146.64000000000001, :data "02/06/2025"}
+   {:alimento "85g de tomate", :calorias 15.469999999999999, :data "03/06/2025"}
+   {:alimento "50g de amendoim", :calorias 289.25, :data "05/06/2025"}]
+  )
 
+(def exercicios
+    [{:exercicio "corrida por 30 minutos", :calorias -240.0, :data "25/05/2025"}
+     {:exercicio "musculacao por 45 minutos", :calorias -180.0, :data "25/05/2025"}
+     {:exercicio "natacao por 60 minutos", :calorias -420.0, :data "26/05/2025"}
+     {:exercicio "yoga por 40 minutos", :calorias -120.0, :data "26/05/2025"}
+     {:exercicio "ciclismo por 90 minutos", :calorias -540.0, :data "27/05/2025"}
+     {:exercicio "pilates por 50 minutos", :calorias -150.0, :data "27/05/2025"}
+     {:exercicio "caminhada por 25 minutos", :calorias -100.0, :data "28/05/2025"}
+     {:exercicio "crossfit por 35 minutos", :calorias -280.0, :data "28/05/2025"}
+     {:exercicio "alongamento por 15 minutos", :calorias -45.0, :data "29/05/2025"}
+     {:exercicio "boxe por 45 minutos", :calorias -360.0, :data "29/05/2025"}
+     {:exercicio "futebol por 75 minutos", :calorias -525.0, :data "30/05/2025"}
+     {:exercicio "tenis por 60 minutos", :calorias -300.0, :data "30/05/2025"}
+     {:exercicio "danca por 40 minutos", :calorias -160.0, :data "31/05/2025"}
+     {:exercicio "escalada por 80 minutos", :calorias -640.0, :data "31/05/2025"}
+     {:exercicio "basquete por 55 minutos", :calorias -330.0, :data "01/06/2025"}
+     {:exercicio "volei por 50 minutos", :calorias -200.0, :data "01/06/2025"}
+     {:exercicio "spinning por 45 minutos", :calorias -315.0, :data "02/06/2025"}
+     {:exercicio "jiu_jitsu por 70 minutos", :calorias -490.0, :data "02/06/2025"}
+     {:exercicio "hidroginastica por 35 minutos", :calorias -140.0, :data "03/06/2025"}
+     {:exercicio "skate por 40 minutos", :calorias -200.0, :data "05/06/2025"}])
 
+(defn calcular_balanco_calorico [data_ini data_fim]
+  (let [transacoes (concat (alimento/consultar_alimentos) (exercicio/consultar_exercicios))
+        transacaoes_periodo (filter #(inInterval? (:data %) data_ini data_fim) transacoes)]
+    (println transacoes)
+    (println transacaoes_periodo)
+    (format "%.2f cal" (reduce + (map #(:calorias %) transacaoes_periodo)))
+    )
+  )
 
-
-(println (consultar_extrato "29/05/2025" "03/06/2025"))
-(println "-----------------------------\n")
-(println (consultar_extrato_exercicios "29/05/2025" "03/06/2025"))
-(println "-----------------------------\n")
-(print (consultar_extrato_alimentos "29/05/2025" "03/06/2025"))
+(println (calcular_balanco_calorico "25/05/2025" "01/06/2025"))
