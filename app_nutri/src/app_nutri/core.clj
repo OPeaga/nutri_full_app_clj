@@ -1,27 +1,24 @@
 (ns app-nutri.core
   (:require [clj-http.client :as	http-client]
             [cheshire.core :as json]
+            [clojure.edn :as edn]
             )
   (:gen-class))
 
 (def url-server "http://localhost:3000")
 
-(defn menu_selecionar_usuario []
+(defn menu_mostrar_usuarios []
   (let [response (http-client/get (str url-server "/usuario/consulta"))]
     (if (= (:status response) 200)
-      (let [body (:body response)
-            altura (:altura body)
-            peso (:peso body)
-            idade (:idade body)
-            sexo (:sexo body)
-            data-registro (:data_registro body)]
-        (println body)
-        (println (str "Altura: " altura
-                      ", Peso: " peso
-                      ", Idade: " idade
-                      ", Sexo: " sexo
-                      ", Data de Registro: " data-registro)))
-      (println "Erro: não foi possível consultar o usuário."))))
+      (let [body (edn/read-string (:body response))]
+        (mapv println (map (fn [a] (str "Id: " (:id a) " Altura: " (:altura a) " Peso: " (:peso a) " Idade: " (:idade a) " Sexo: " (:sexo a) )) body))
+        (let [entrada (read)]
+          (println "digite o id do usuário")
+          ;chamar menus de alimento e exercicio e consultas gerais
+          )
+        )
+      (println "Erro: não foi possível consultar o usuário.")))
+  )
 
 
 (defn menu_registrar_usuario []
@@ -47,7 +44,7 @@
       (let [entrada (read)]
         (cond
           (= 1 entrada) (do (menu_registrar_usuario) (recur entrada) )
-          (= 2 entrada) (do (menu_selecionar_usuario) (recur entrada) )
+          (= 2 entrada) (do (menu_mostrar_usuarios) (recur entrada) )
           )
         )
       )
