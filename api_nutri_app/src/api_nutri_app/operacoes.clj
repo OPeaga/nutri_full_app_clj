@@ -211,7 +211,7 @@
 (def consultar_extrato_exercicios (partial consultar_extrato 2))
 (def consultar_extrato_alimentos  (partial consultar_extrato 1))
 
-(registrar_usuario 176 82 23 "M")
+;(registrar_usuario 176 82 23 "M")
 
 (def alimentos
   [{:alimento "150g de arroz", :calorias 191.10000000000002, :data "25/05/2025"}
@@ -261,7 +261,5 @@
   )
 
 (defn consultar_usuario []
-  (str (usuario/getUsuario_por_id 1))
+  (usuario/consultar_usuarios)
   )
-
-;(println (calcular_balanco_calorico "25/05/2025" "01/06/2025"))
