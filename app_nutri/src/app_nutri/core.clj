@@ -32,8 +32,6 @@
   (let [resp (http-client/get url {:accept :json})]
     (json/parse-string (:body resp) true)))
 
-;; todos os menus funcionais, como o ambiente ta rodando no teu, eu n consegui rodar os endpoints -> que história e essa do bicho tá funcionando se tu não testou fi de uma mãe
-;; mas acredito que estejam todos funcionando já que eu segui o padrão do seu que está funcionando
 
 (defn registrar-usuario []
   (println "Digite: altura(cm) peso(kg) idade sexo(M/F)")
@@ -44,25 +42,45 @@
         resp (post-json (str url-server "/usuario/cadastra")
                         {:altura altura :peso peso :idade idade :sexo sexo})]
     (println "Usuario Criado:" (formatador_strings_usuario (first (:body resp))))
-    ))
+    )
+  )
+
+(defn dados_usuario [id]
+  (let [response (get-json (str url-server "usuario/consulta/" id ))]
+    (formatador_strings_usuario response)
+    )
+  )
+
+(defn menu-exercicios-alimentos-geral []
+  (let [usuario_nome ()]
+    (println (str "\n==== MENU APP NUTRI - MENU DE INTERACOES ALIMENTO E EXERCICIOS - ==== ") ) ;; Mostrar tudo e realizar todas as operações relacionadas a alimentos e exercícios
+  (println "1. Registrar Consumo de Alimentos")
+  (println "2. Registrar Atividade Física")
+  (println "3. Listar Alimentos Consumidos por Periodo")
+  (println "3. Listar Atividades Físicas Realizadas por Periodo")
+  (println "5. Consultar Saldo Calorico")
+  (println "6. Consultar Extrato por Periodo")
+  (println "7. Consultar Dados do Usuario")
+  (print "Escolha: ") (flush))
+  )
+
+
 
 (defn listar-usuarios []
   (println "\n==== MENU APP NUTRI - LISTA DE USUARIOS ==== ")
   (let [usuarios (get-json (str url-server "/usuario/consulta"))]
     (mapv println (map #(formatador_strings_usuario %) usuarios))
-    (println "Digite o 'id' do usuario escolhido ou '0' para voltar ao menu inicial")
+    (println "Digite o 'id' do usuario escolhido ou '0' para voltar ao menu inicial\n")
     (let [entrada (read)]
       (cond
         (= entrada 0) nil
-        (= entrada 1) (menu-exerciccios-alimentos-geral)
+        (= entrada 1) (menu-exercicios-alimentos-geral)
         :else
           (do (println "Opção Inválida") (recur))
         )
       )
     )
   )
-
-(defn menu-exercicios-alimentos-geral [])
 
 (defn registrar-alimento []
   (println "Digite: nome porção(g) data(dd/MM/yyyy)")

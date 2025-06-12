@@ -13,6 +13,9 @@
 
            (GET "/usuario/consulta" [] (response (ops/consultar_usuario)))
 
+           (GET "/usuario/:id" [id] (response (ops/consultar_dados_usuario :id)))
+
+
            (POST "/usuario/cadastra" req
              (let [{:keys [altura peso idade sexo]} (:body req)]
                (response (ops/registrar_usuario altura peso idade sexo))))

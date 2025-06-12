@@ -263,3 +263,7 @@
 (defn consultar_usuario []
   (usuario/consultar_usuarios)
   )
+
+(defn consultar_dados_usuario [id]
+  (usuario/getUsuario_por_id 1)
+  )
