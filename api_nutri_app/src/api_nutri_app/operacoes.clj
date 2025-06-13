@@ -93,7 +93,9 @@
                                 :peso peso
                                 :idade idade
                                 :sexo sexo
-                                :data_registro data_atual_formatada})))
+                                :data_registro data_atual_formatada})
+    )
+  )
 
 (defn converte_kg_pounds [peso_kg]
   (* (double peso_kg) 2.20462)
